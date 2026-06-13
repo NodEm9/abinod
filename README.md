@@ -39,6 +39,7 @@ Do not commit `.env`.
 - Products
 - Ecosystem
 - About
+- Founder
 - Mission
 - Brand Essence
 - Contact

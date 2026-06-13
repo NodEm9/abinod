@@ -718,6 +718,45 @@ h3 {
   width: 64%;
 }
 
+.founder-article {
+  max-width: 1040px;
+}
+
+.founder-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+  gap: clamp(30px, 5vw, 68px);
+  align-items: start;
+}
+
+.founder-profile-card {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 28px;
+  background:
+    linear-gradient(180deg, rgba(212, 175, 55, 0.1), transparent 72%),
+    var(--paper);
+}
+
+.founder-profile-card h2 {
+  margin-bottom: 16px;
+  font-size: clamp(1.8rem, 3vw, 2.55rem);
+  line-height: 1.05;
+}
+
+.founder-profile-card span {
+  display: block;
+  color: var(--slate);
+}
+
+.founder-industries {
+  margin: 28px 0;
+}
+
+.founder-journey {
+  margin-bottom: 28px;
+}
+
 .journey-section {
   max-width: 920px;
   margin-top: 56px;
@@ -1760,6 +1799,7 @@ footer {
   }
 
   .about-product-layout,
+  .founder-intro,
   .journey-grid,
   .build-toward-grid,
   .keystone-principle-layout {
