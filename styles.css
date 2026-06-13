@@ -55,7 +55,6 @@ img {
 }
 
 .site-header.page-header {
-  position: absolute;
   background: linear-gradient(180deg, rgba(8, 15, 20, 0.92), rgba(8, 15, 20, 0));
 }
 
@@ -1675,7 +1674,8 @@ footer {
 
 @media (max-width: 900px) {
   .site-header {
-    position: absolute;
+    background: linear-gradient(180deg, rgba(8, 15, 20, 0.94), rgba(8, 15, 20, 0.72));
+    backdrop-filter: blur(14px);
   }
 
   nav {
