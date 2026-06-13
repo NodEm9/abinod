@@ -1369,8 +1369,90 @@ blockquote {
   background: var(--paper);
 }
 
+.blog-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 760px);
+  gap: 24px;
+}
+
+.blog-card {
+  transition:
+    border-color 180ms ease,
+    transform 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.blog-card:hover {
+  border-color: rgba(212, 175, 55, 0.52);
+  box-shadow: 0 18px 48px rgba(8, 15, 20, 0.08);
+  transform: translateY(-2px);
+}
+
 .blog-card p {
   color: var(--slate);
+}
+
+.blog-card h3 {
+  font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+}
+
+.blog-link {
+  color: var(--gold);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.blog-article {
+  background: var(--paper);
+}
+
+.blog-article-hero {
+  padding: 170px clamp(20px, 6vw, 92px) 86px;
+  color: var(--white);
+  background:
+    radial-gradient(circle at 76% 22%, rgba(212, 175, 55, 0.16), transparent 28%),
+    linear-gradient(135deg, #050a0e 0%, #10171d 48%, #252b30 100%);
+}
+
+.blog-article-hero h1,
+.blog-article-hero p {
+  max-width: 920px;
+}
+
+.blog-article-hero h1 {
+  margin-bottom: 24px;
+}
+
+.blog-article-hero p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: clamp(1.08rem, 2vw, 1.3rem);
+}
+
+.blog-article-body {
+  max-width: 820px;
+  padding: 76px clamp(20px, 6vw, 92px) 96px;
+}
+
+.blog-article-body p,
+.blog-article-body blockquote {
+  color: var(--slate);
+  font-size: clamp(1.05rem, 1.5vw, 1.18rem);
+}
+
+.blog-article-body p {
+  margin: 0 0 22px;
+}
+
+.blog-article-body blockquote {
+  margin: 44px 0;
+  border-left: 3px solid var(--gold);
+  padding: 18px 0 18px 28px;
+  color: var(--ink);
+  font-size: clamp(1.55rem, 3vw, 2.35rem);
+  font-weight: 800;
+  line-height: 1.16;
 }
 
 .contact-methods {

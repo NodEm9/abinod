@@ -42,6 +42,7 @@ Do not commit `.env`.
 - Founder
 - Mission
 - Brand Essence
+- Blog
 - Contact
 - Ambiten Docs entry point
 
