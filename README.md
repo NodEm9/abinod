@@ -39,6 +39,7 @@ Abinod exists to create products that help software remain understandable as it 
 - Static HTML, CSS, and JavaScript
 - Service worker
 - GitHub Actions for production readiness checks
+- Vercel Functions for production API routes
 
 ## Run Locally
 
@@ -138,6 +139,35 @@ The workflow:
 - Smoke-tests the main public routes
 - Smoke-tests contact form validation
 - Prints server logs if something fails
+
+## Deploying On Vercel
+
+The static website can be deployed on Vercel, and the contact API is implemented
+as Vercel Functions in the `api/` directory:
+
+```text
+api/contact.js
+api/health.js
+```
+
+The frontend posts to `/api/contact`, so no client-side URL change is needed
+when the site is served from Vercel.
+
+In the Vercel dashboard, add these Environment Variables for Production:
+
+```text
+MONGODB_URI
+MONGODB_DB
+CONTACT_COLLECTION
+NODE_ENV=production
+```
+
+After adding environment variables, redeploy the project. You can verify the API
+configuration at:
+
+```text
+https://www.abinod.com/api/health
+```
 
 ## Open Graph
 
