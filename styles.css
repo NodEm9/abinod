@@ -2152,6 +2152,16 @@ body[data-theme="dark"] .form-row select option {
   cursor: pointer;
 }
 
+.cookie-actions .button.secondary {
+  color: var(--ink);
+  background: rgba(8, 15, 20, 0.04);
+}
+
+.cookie-actions .button.secondary:hover {
+  border-color: rgba(212, 175, 55, 0.55);
+  background: rgba(212, 175, 55, 0.1);
+}
+
 .cookie-preferences {
   grid-column: 1 / -1;
   display: grid;
