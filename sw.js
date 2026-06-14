@@ -1,4 +1,4 @@
-const CACHE_NAME = "abinod-static-v2";
+const CACHE_NAME = "abinod-static-v3";
 const STATIC_ASSETS = [
   "/styles.css",
   "/assets/site.js",
@@ -52,6 +52,29 @@ self.addEventListener("fetch", (event) => {
               headers: { "Content-Type": "text/plain" },
             }),
         ),
+    );
+    return;
+  }
+
+  const isFreshAsset =
+    isSameOrigin &&
+    (requestUrl.pathname.endsWith(".css") ||
+      requestUrl.pathname.endsWith(".js"));
+
+  if (isFreshAsset) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => {
+          if (networkResponse.ok) {
+            const responseClone = networkResponse.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseClone);
+            });
+          }
+
+          return networkResponse;
+        })
+        .catch(() => caches.match(event.request)),
     );
     return;
   }
