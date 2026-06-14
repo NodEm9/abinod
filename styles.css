@@ -1720,6 +1720,13 @@ blockquote {
   color: #9a2f2f;
 }
 
+.form-status a {
+  color: inherit;
+  font-weight: 800;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
 .form-status[data-state="loading"] {
   color: #8b6a17;
 }

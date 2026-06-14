@@ -91,6 +91,8 @@ Valid submissions are stored in MongoDB using the configured `MONGODB_URI`, data
 
 The endpoint also validates required fields and includes a honeypot field for basic bot filtering.
 
+If submissions return a contact-service error, confirm that the production host has `MONGODB_URI` configured as an environment variable. Static-only hosting will serve the pages, but it will not run the Express `/api/contact` endpoint.
+
 ## Cookies And Consent
 
 The website shows a bottom consent banner for first-time visitors. Visitors can accept all optional cookies, reject optional cookies, or save preferences for preference and analytics cookies.

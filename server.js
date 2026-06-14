@@ -14,15 +14,25 @@ const mongoUri = process.env.MONGODB_URI;
 const mongoDbName = process.env.MONGODB_DB || "abinod";
 const contactCollectionName =
   process.env.CONTACT_COLLECTION || "contact_submissions";
+const isProduction = process.env.NODE_ENV === "production";
 
 let mongoClientPromise;
 
 function getMongoClient() {
   if (!mongoUri) {
-    throw new Error("MONGODB_URI is not configured.");
+    const error = new Error("MONGODB_URI is not configured.");
+    error.code = "CONTACT_STORAGE_NOT_CONFIGURED";
+    throw error;
   }
 
-  mongoClientPromise ??= new MongoClient(mongoUri).connect();
+  mongoClientPromise ??= new MongoClient(mongoUri, {
+    serverSelectionTimeoutMS: 8000,
+  })
+    .connect()
+    .catch((error) => {
+      mongoClientPromise = undefined;
+      throw error;
+    });
   return mongoClientPromise;
 }
 
@@ -58,6 +68,13 @@ function validateContactSubmission(body) {
 app.use(express.json({ limit: "32kb" }));
 app.use(express.urlencoded({ extended: false, limit: "32kb" }));
 
+app.get("/api/health", (request, response) => {
+  response.json({
+    ok: true,
+    contactStorage: Boolean(mongoUri),
+  });
+});
+
 app.post("/api/contact", async (request, response) => {
   try {
     if (request.body.website) {
@@ -85,10 +102,31 @@ app.post("/api/contact", async (request, response) => {
     });
   } catch (error) {
     console.error("Contact form submission failed:", error);
+
+    if (error.code === "CONTACT_STORAGE_NOT_CONFIGURED") {
+      return response.status(503).json({
+        error: isProduction
+          ? "The contact service is not configured yet. Please email hello@abinod.com."
+          : "MONGODB_URI is not configured. Add it to .env to enable contact submissions.",
+        fallbackEmail: "hello@abinod.com",
+      });
+    }
+
     response.status(500).json({
-      error: "The message could not be sent right now. Please try again later.",
+      error: "The message could not be sent right now. Please email hello@abinod.com.",
+      fallbackEmail: "hello@abinod.com",
     });
   }
+});
+
+app.use((error, request, response, next) => {
+  if (error instanceof SyntaxError && "body" in error) {
+    return response.status(400).json({
+      error: "The request body was not valid JSON.",
+    });
+  }
+
+  next(error);
 });
 
 app.use(
