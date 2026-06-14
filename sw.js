@@ -1,6 +1,5 @@
-const CACHE_NAME = "abinod-static-v1";
+const CACHE_NAME = "abinod-static-v2";
 const STATIC_ASSETS = [
-  "/",
   "/styles.css",
   "/assets/site.js",
   "/assets/contact-form.js",
@@ -36,6 +35,27 @@ self.addEventListener("activate", (event) => {
 self.addEventListener("fetch", (event) => {
   if (event.request.method !== "GET") return;
 
+  const requestUrl = new URL(event.request.url);
+  const isSameOrigin = requestUrl.origin === self.location.origin;
+  const acceptsHtml = event.request.headers
+    .get("accept")
+    ?.includes("text/html");
+
+  if (event.request.mode === "navigate" || acceptsHtml) {
+    event.respondWith(
+      fetch(event.request)
+        .then((networkResponse) => networkResponse)
+        .catch(
+          () =>
+            new Response("This page is temporarily unavailable offline.", {
+              status: 503,
+              headers: { "Content-Type": "text/plain" },
+            }),
+        ),
+    );
+    return;
+  }
+
   event.respondWith(
     caches.match(event.request).then((cachedResponse) => {
       if (cachedResponse) return cachedResponse;
@@ -43,7 +63,7 @@ self.addEventListener("fetch", (event) => {
       return fetch(event.request).then((networkResponse) => {
         const shouldCache =
           networkResponse.ok &&
-          new URL(event.request.url).origin === self.location.origin;
+          isSameOrigin;
 
         if (shouldCache) {
           const responseClone = networkResponse.clone();

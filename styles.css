@@ -1531,6 +1531,24 @@ blockquote {
   font-size: clamp(1.08rem, 2vw, 1.3rem);
 }
 
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 32px;
+}
+
+.article-meta span {
+  border: 1px solid rgba(212, 175, 55, 0.32);
+  border-radius: 999px;
+  padding: 7px 11px;
+  color: rgba(255, 255, 255, 0.78);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
 .blog-article-body {
   max-width: 780px;
   padding: 76px clamp(20px, 6vw, 92px) 96px;
@@ -1557,6 +1575,14 @@ blockquote {
   margin: 58px 0 18px;
   font-size: clamp(1.5rem, 2.8vw, 2.25rem);
   line-height: 1.12;
+}
+
+.article-divider {
+  width: 72px;
+  height: 2px;
+  margin: 48px 0 10px;
+  border: 0;
+  background: var(--gold);
 }
 
 .blog-article-body blockquote {
