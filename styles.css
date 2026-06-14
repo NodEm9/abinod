@@ -1443,6 +1443,8 @@ blockquote {
 }
 
 .blog-card {
+  display: grid;
+  gap: 14px;
   max-width: 760px;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -1470,18 +1472,36 @@ blockquote {
 }
 
 .blog-card p {
+  max-width: 620px;
+  margin: 0;
   color: var(--slate);
 }
 
+.blog-card .product-label {
+  color: var(--gold);
+}
+
 .blog-card h3 {
+  margin: 0;
   font-size: clamp(1.4rem, 2.6vw, 2.1rem);
+  line-height: 1.1;
 }
 
 .blog-link {
-  color: var(--gold);
+  display: inline-flex;
+  width: fit-content;
+  min-height: 42px;
+  align-items: center;
+  justify-content: center;
+  margin-top: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.54);
+  border-radius: 3px;
+  padding: 0 16px;
+  color: #080f14;
+  background: linear-gradient(135deg, rgba(241, 214, 115, 0.96), rgba(212, 175, 55, 0.92));
   font-size: 0.78rem;
   font-weight: 900;
-  letter-spacing: 0.12em;
+  letter-spacing: 0.08em;
   text-transform: uppercase;
 }
 
