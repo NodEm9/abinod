@@ -2,9 +2,40 @@
   <img src="assets/abinod-mark.svg" alt="Abinod logo" width="96" />
 </p>
 
-# Abinod Website
+# Abinod
 
-Official website for Abinod, a founder-led software company building infrastructure products for modern applications.
+Official website for [Abinod](https://www.abinod.com/), a founder-led software company building infrastructure products for modern applications.
+
+Abinod exists to create products that help software remain understandable as it grows. Its first product is Ambiten, a context-aware runtime for modern multi-tenant systems.
+
+## Live Site
+
+[https://www.abinod.com/](https://www.abinod.com/)
+
+## What Is Included
+
+- Company homepage
+- Products page
+- Ecosystem page
+- About page
+- Founder page
+- Mission page
+- Brand Essence page
+- Blog and first essay
+- Contact page with MongoDB-backed form submission
+- Ambiten documentation entry point
+- Shared Open Graph image
+- Mobile navigation
+- Light and dark mode
+- First-visit site guide
+
+## Tech Stack
+
+- Node.js
+- Express
+- MongoDB Node.js driver
+- Static HTML, CSS, and JavaScript
+- GitHub Actions for production readiness checks
 
 ## Run Locally
 
@@ -14,17 +45,25 @@ Install dependencies:
 npm install
 ```
 
-Start the site:
+Start the production server locally:
 
 ```bash
 npm start
 ```
 
-By default, the site runs at `http://localhost:3000`.
+Start the development server with Node watch mode:
 
-## Contact Form
+```bash
+npm run dev
+```
 
-The contact form posts to `/api/contact` and stores submissions in MongoDB.
+By default, the site runs at:
+
+```text
+http://localhost:3000
+```
+
+## Environment Variables
 
 Create a local `.env` file from `.env.example`:
 
@@ -37,19 +76,64 @@ CONTACT_COLLECTION=contact_submissions
 
 Do not commit `.env`.
 
-## Pages
+## Contact Form
 
-- Home
-- Products
-- Ecosystem
-- About
-- Founder
-- Mission
-- Brand Essence
-- Blog
-- Contact
-- Ambiten Docs entry point
+The contact form posts to:
+
+```text
+POST /api/contact
+```
+
+Valid submissions are stored in MongoDB using the configured `MONGODB_URI`, database name, and collection name.
+
+The endpoint also validates required fields and includes a honeypot field for basic bot filtering.
+
+## Production Workflow
+
+The production GitHub Actions workflow lives at:
+
+```text
+.github/workflows/production.yml
+```
+
+It runs on pushes to `main` and can also be started manually from GitHub Actions.
+
+The workflow:
+
+- Installs dependencies with `npm ci`
+- Checks JavaScript syntax
+- Starts the production server
+- Smoke-tests the main public routes
+- Smoke-tests contact form validation
+- Prints server logs if something fails
 
 ## Open Graph
 
-The site uses `assets/og-abinod.png` as the shared Open Graph and Twitter card image.
+The website uses this shared Open Graph and Twitter card image:
+
+```text
+assets/og-abinod.png
+```
+
+## Project Structure
+
+```text
+.
+├── about/
+├── assets/
+├── blog/
+├── brand-essence/
+├── contact/
+├── docs/
+├── ecosystem/
+├── founder/
+├── mission/
+├── products/
+├── server.js
+├── styles.css
+└── package.json
+```
+
+## Brand Principle
+
+Strong foundations create stronger systems.
