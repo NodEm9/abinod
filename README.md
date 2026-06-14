@@ -79,6 +79,19 @@ CONTACT_COLLECTION=contact_submissions
 
 Do not commit `.env`.
 
+For production, configure the same variables in the hosting provider's
+environment settings:
+
+```text
+MONGODB_URI
+MONGODB_DB
+CONTACT_COLLECTION
+NODE_ENV=production
+```
+
+The contact form cannot store messages unless `MONGODB_URI` is available to the
+running server process.
+
 ## Contact Form
 
 The contact form posts to:

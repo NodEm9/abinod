@@ -14,7 +14,6 @@ const mongoUri = process.env.MONGODB_URI;
 const mongoDbName = process.env.MONGODB_DB || "abinod";
 const contactCollectionName =
   process.env.CONTACT_COLLECTION || "contact_submissions";
-const isProduction = process.env.NODE_ENV === "production";
 
 let mongoClientPromise;
 
@@ -65,6 +64,11 @@ function validateContactSubmission(body) {
   return { submission };
 }
 
+function isLocalRequest(request) {
+  const host = request.hostname;
+  return host === "localhost" || host === "127.0.0.1" || host === "::1";
+}
+
 app.use(express.json({ limit: "32kb" }));
 app.use(express.urlencoded({ extended: false, limit: "32kb" }));
 
@@ -105,9 +109,9 @@ app.post("/api/contact", async (request, response) => {
 
     if (error.code === "CONTACT_STORAGE_NOT_CONFIGURED") {
       return response.status(503).json({
-        error: isProduction
-          ? "The contact service is not configured yet. Please email hello@abinod.com."
-          : "MONGODB_URI is not configured. Add it to .env to enable contact submissions.",
+        error: isLocalRequest(request)
+          ? "MONGODB_URI is not configured. Add it to .env to enable contact submissions."
+          : "The contact service is not available yet. Please email hello@abinod.com.",
         fallbackEmail: "hello@abinod.com",
       });
     }
