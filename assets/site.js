@@ -194,6 +194,15 @@ function registerServiceWorker() {
   });
 }
 
+function runWhenIdle(callback, timeout = 1600) {
+  if ("requestIdleCallback" in window) {
+    window.requestIdleCallback(callback, { timeout });
+    return;
+  }
+
+  window.setTimeout(callback, timeout);
+}
+
 applyTheme(initialTheme);
 
 menuToggle?.addEventListener("click", () => {
@@ -212,5 +221,5 @@ themeToggle?.addEventListener("click", () => {
 guideToggle?.addEventListener("click", () => openGuide(true));
 
 registerServiceWorker();
-openCookieConsent();
-openGuide();
+runWhenIdle(openCookieConsent, 900);
+runWhenIdle(openGuide, 1800);

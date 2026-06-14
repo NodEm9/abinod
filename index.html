@@ -23,7 +23,8 @@
     <meta name="twitter:image" content="assets/og-abinod.png" />
     <title>Abinod | Building Infrastructure. Powering Possibilities.</title>
     <link rel="icon" href="assets/abinod-mark.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="styles.css" />
+    <link rel="preload" href="styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="styles.css" /></noscript>
   </head>
   <body>
     <header class="site-header">
@@ -63,7 +64,7 @@
           </p>
           <div class="hero-actions">
             <a class="button primary" href="products/">Explore Products</a>
-            <a class="button secondary" href="ecosystem/">Learn More</a>
+            <a class="button secondary" href="ecosystem/">Explore the Ecosystem</a>
           </div>
           <div class="hero-proof" aria-label="Company principles">
             <span>Company</span>
@@ -321,6 +322,6 @@
       </div>
       <p class="legal">Copyright 2026 Abinod. All rights reserved.</p>
     </footer>
-    <script src="assets/site.js"></script>
+    <script src="assets/site.js" defer></script>
   </body>
 </html>

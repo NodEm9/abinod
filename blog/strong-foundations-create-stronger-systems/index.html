@@ -23,7 +23,8 @@
     <meta name="twitter:image" content="../../assets/og-abinod.png" />
     <title>Strong Foundations Create Stronger Systems | Abinod</title>
     <link rel="icon" href="../../assets/abinod-mark.svg" type="image/svg+xml" />
-    <link rel="stylesheet" href="../../styles.css" />
+    <link rel="preload" href="../../styles.css" as="style" onload="this.onload=null;this.rel='stylesheet'" />
+    <noscript><link rel="stylesheet" href="../../styles.css" /></noscript>
   </head>
   <body>
     <header class="site-header page-header">
@@ -201,6 +202,6 @@
       </div>
       <p class="legal">Copyright 2026 Abinod. All rights reserved.</p>
     </footer>
-    <script src="../../assets/site.js"></script>
+    <script src="../../assets/site.js" defer></script>
   </body>
 </html>
