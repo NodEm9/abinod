@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="assets/abinod-mark.svg" alt="Abinod logo" width="96" />
+</p>
+
 # Abinod Website
 
 Official website for Abinod, a founder-led software company building infrastructure products for modern applications.
