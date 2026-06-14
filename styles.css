@@ -14,10 +14,12 @@
 body[data-theme="dark"] {
   --ink: #f6f4ec;
   --charcoal: #d8dde4;
-  --slate: rgba(255, 255, 255, 0.68);
-  --paper: #070b10;
-  --line: rgba(255, 255, 255, 0.12);
+  --slate: rgba(255, 255, 255, 0.76);
+  --paper: #10161d;
+  --line: rgba(255, 255, 255, 0.16);
   --shadow: 0 24px 80px rgba(0, 0, 0, 0.42);
+  --surface: #141b23;
+  --surface-strong: #1a232d;
 }
 
 * {
@@ -1887,7 +1889,68 @@ body[data-theme="dark"] .journey-grid div,
 body[data-theme="dark"] .principles-list div,
 body[data-theme="dark"] .keystone-diagram,
 body[data-theme="dark"] .founder-profile-card {
-  background-color: var(--paper);
+  background-color: var(--surface);
+}
+
+body[data-theme="dark"] .metrics div,
+body[data-theme="dark"] .build-toward-grid div,
+body[data-theme="dark"] .journey-grid div,
+body[data-theme="dark"] .principles-list div,
+body[data-theme="dark"] .values-grid article,
+body[data-theme="dark"] .product-card,
+body[data-theme="dark"] .blog-card,
+body[data-theme="dark"] .contact-card {
+  border-color: rgba(255, 255, 255, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.035), transparent),
+    var(--surface-strong);
+}
+
+body[data-theme="dark"] .ecosystem-section {
+  color: var(--white);
+  background:
+    radial-gradient(circle at 72% 22%, rgba(212, 175, 55, 0.16), transparent 26%),
+    linear-gradient(135deg, #121a23 0%, #0b1118 52%, #151d26 100%);
+}
+
+body[data-theme="dark"] .ecosystem-copy p:not(.eyebrow),
+body[data-theme="dark"] .product-node small,
+body[data-theme="dark"] .company-node {
+  color: rgba(255, 255, 255, 0.82);
+}
+
+body[data-theme="dark"] .ecosystem-map {
+  border-color: rgba(212, 175, 55, 0.28);
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.075), rgba(255, 255, 255, 0.035)),
+    rgba(255, 255, 255, 0.045);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.28);
+}
+
+body[data-theme="dark"] .ecosystem-node {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.07);
+}
+
+body[data-theme="dark"] .product-node.active {
+  border-color: rgba(212, 175, 55, 0.58);
+  background:
+    radial-gradient(circle at 84% 10%, rgba(43, 167, 255, 0.28), transparent 34%),
+    rgba(255, 255, 255, 0.1);
+}
+
+body[data-theme="dark"] .ecosystem-line {
+  background: linear-gradient(var(--gold), rgba(255, 255, 255, 0.22));
+}
+
+body[data-theme="dark"] .node-mark.origin-mark {
+  background:
+    linear-gradient(90deg, transparent 42%, #10161d 42% 58%, transparent 58%),
+    #f5f3ef;
+}
+
+body[data-theme="dark"] .node-mark.orbit-mark {
+  border-color: rgba(255, 255, 255, 0.86);
 }
 
 body[data-theme="dark"] .button.secondary {
