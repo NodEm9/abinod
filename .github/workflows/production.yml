@@ -93,3 +93,5 @@ jobs:
           if [ -f server.pid ]; then
             kill "$(cat server.pid)" || true
           fi
+env: 
+  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
