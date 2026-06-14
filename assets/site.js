@@ -27,6 +27,7 @@ function closeMenu() {
 
 function openGuide(force = false) {
   if (!force && localStorage.getItem("abinod-guide-seen") === "true") return;
+  if (!force) localStorage.setItem("abinod-guide-seen", "true");
 
   const guide = document.createElement("div");
   guide.className = "site-guide";
@@ -60,7 +61,6 @@ function openGuide(force = false) {
   guide.querySelector("[data-guide-close]")?.focus();
 
   function closeGuide() {
-    localStorage.setItem("abinod-guide-seen", "true");
     document.body.classList.remove("guide-open");
     guide.remove();
   }
