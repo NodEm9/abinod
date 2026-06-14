@@ -6,6 +6,52 @@
       "maxDuration": 10
     }
   },
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/index.html"
+    },
+    {
+      "source": "/about/",
+      "destination": "/about/index.html"
+    },
+    {
+      "source": "/blog/",
+      "destination": "/blog/index.html"
+    },
+    {
+      "source": "/blog/strong-foundations-create-stronger-systems/",
+      "destination": "/blog/strong-foundations-create-stronger-systems/index.html"
+    },
+    {
+      "source": "/brand-essence/",
+      "destination": "/brand-essence/index.html"
+    },
+    {
+      "source": "/contact/",
+      "destination": "/contact/index.html"
+    },
+    {
+      "source": "/docs/",
+      "destination": "/docs/index.html"
+    },
+    {
+      "source": "/ecosystem/",
+      "destination": "/ecosystem/index.html"
+    },
+    {
+      "source": "/founder/",
+      "destination": "/founder/index.html"
+    },
+    {
+      "source": "/mission/",
+      "destination": "/mission/index.html"
+    },
+    {
+      "source": "/products/",
+      "destination": "/products/index.html"
+    }
+  ],
   "headers": [
     {
       "source": "/sw.js",
