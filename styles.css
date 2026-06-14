@@ -2040,7 +2040,7 @@ body[data-theme="dark"] .form-row textarea {
     overflow-y: auto;
     border: 1px solid rgba(255, 255, 255, 0.14);
     border-radius: 8px;
-    padding: 16px;
+    padding: 68px 16px 16px;
     background: rgba(8, 15, 20, 0.96);
     box-shadow: 0 24px 80px rgba(0, 0, 0, 0.32);
     opacity: 0;
@@ -2069,6 +2069,30 @@ body[data-theme="dark"] .form-row textarea {
 
   .header-actions {
     margin-left: auto;
+  }
+
+  .header-actions [data-theme-toggle] {
+    position: fixed;
+    top: 98px;
+    left: 32px;
+    right: 32px;
+    z-index: 11;
+    justify-content: flex-start;
+    border-color: rgba(212, 175, 55, 0.34);
+    color: var(--white);
+    background: rgba(212, 175, 55, 0.12);
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+    transition:
+      opacity 180ms ease,
+      transform 180ms ease;
+  }
+
+  .menu-open .header-actions [data-theme-toggle] {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
   }
 
   .guide-toggle {
