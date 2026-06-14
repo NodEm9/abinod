@@ -50,6 +50,29 @@ jobs:
           npm start > server.log 2>&1 &
           echo $! > server.pid
 
+      - name: Wait for production server
+        run: |
+          set -euo pipefail
+
+          for attempt in {1..30}; do
+            if ! kill -0 "$(cat server.pid)" 2>/dev/null; then
+              echo "Server process exited before it became ready."
+              cat server.log || true
+              exit 1
+            fi
+
+            if curl --fail --silent --show-error "http://127.0.0.1:${PORT}/" > /dev/null; then
+              echo "Server is ready."
+              exit 0
+            fi
+
+            sleep 1
+          done
+
+          echo "Server did not become ready in time."
+          cat server.log || true
+          exit 1
+
       - name: Smoke test public routes
         run: |
           set -euo pipefail
@@ -70,13 +93,13 @@ jobs:
             "/sw.js" \
             "/assets/og-abinod.png"
           do
-            curl --fail --silent --show-error --retry 10 --retry-delay 1 "http://localhost:${PORT}${route}" > /dev/null
+            curl --fail --silent --show-error "http://127.0.0.1:${PORT}${route}" > /dev/null
           done
 
       - name: Smoke test contact validation
         run: |
           status=$(curl --silent --output response.json --write-out "%{http_code}" \
-            --request POST "http://localhost:${PORT}/api/contact" \
+            --request POST "http://127.0.0.1:${PORT}/api/contact" \
             --header "Content-Type: application/json" \
             --data '{"name":"A","email":"bad","topic":"General","message":"short"}')
 
@@ -97,5 +120,3 @@ jobs:
           if [ -f server.pid ]; then
             kill "$(cat server.pid)" || true
           fi
-env: 
-  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
