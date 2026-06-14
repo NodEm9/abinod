@@ -28,6 +28,8 @@ Abinod exists to create products that help software remain understandable as it 
 - Mobile navigation
 - Light and dark mode
 - First-visit site guide
+- Cookie consent banner
+- Service worker for static asset caching
 
 ## Tech Stack
 
@@ -35,6 +37,7 @@ Abinod exists to create products that help software remain understandable as it 
 - Express
 - MongoDB Node.js driver
 - Static HTML, CSS, and JavaScript
+- Service worker
 - GitHub Actions for production readiness checks
 
 ## Run Locally
@@ -87,6 +90,20 @@ POST /api/contact
 Valid submissions are stored in MongoDB using the configured `MONGODB_URI`, database name, and collection name.
 
 The endpoint also validates required fields and includes a honeypot field for basic bot filtering.
+
+## Cookies And Consent
+
+The website shows a bottom consent banner for first-time visitors. Visitors can accept all optional cookies, reject optional cookies, or save preferences for preference and analytics cookies.
+
+The consent choice is stored in a first-party cookie named:
+
+```text
+abinod_cookie_consent
+```
+
+## Service Worker
+
+The site registers `sw.js` to cache core static assets for faster repeat visits and basic offline resilience.
 
 ## Production Workflow
 

@@ -6,6 +6,7 @@ const guideToggle = document.querySelector("[data-guide-toggle]");
 const storedTheme = localStorage.getItem("abinod-theme");
 const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 const initialTheme = storedTheme || (prefersDark ? "dark" : "light");
+const consentCookieName = "abinod_cookie_consent";
 
 function applyTheme(theme) {
   document.body.dataset.theme = theme;
@@ -79,6 +80,120 @@ function openGuide(force = false) {
   );
 }
 
+function setCookie(name, value, days) {
+  const expires = new Date(Date.now() + days * 864e5).toUTCString();
+  document.cookie = `${name}=${encodeURIComponent(value)}; expires=${expires}; path=/; SameSite=Lax`;
+}
+
+function getCookie(name) {
+  return document.cookie
+    .split("; ")
+    .find((row) => row.startsWith(`${name}=`))
+    ?.split("=")[1];
+}
+
+function saveCookieConsent(preferences) {
+  const value = JSON.stringify({
+    ...preferences,
+    savedAt: new Date().toISOString(),
+  });
+  setCookie(consentCookieName, value, 180);
+}
+
+function openCookieConsent() {
+  if (getCookie(consentCookieName)) return;
+
+  const banner = document.createElement("section");
+  banner.className = "cookie-consent";
+  banner.setAttribute("aria-labelledby", "cookie-consent-title");
+  banner.innerHTML = `
+    <div class="cookie-consent-panel" role="dialog" aria-modal="false">
+      <div class="cookie-consent-copy">
+        <p class="eyebrow">Cookies</p>
+        <h2 id="cookie-consent-title">Choose how Abinod uses cookies.</h2>
+        <p>
+          We use necessary cookies to keep the site working. With your consent,
+          we may also use preference and analytics cookies to improve the
+          experience.
+        </p>
+      </div>
+      <div class="cookie-preferences" hidden>
+        <label>
+          <input type="checkbox" checked disabled />
+          <span>Necessary cookies</span>
+        </label>
+        <label>
+          <input type="checkbox" name="preferences" />
+          <span>Preference cookies</span>
+        </label>
+        <label>
+          <input type="checkbox" name="analytics" />
+          <span>Analytics cookies</span>
+        </label>
+      </div>
+      <div class="cookie-actions">
+        <button class="button secondary" type="button" data-cookie-reject>Reject all</button>
+        <button class="button secondary" type="button" data-cookie-preferences>Set preferences</button>
+        <button class="button primary" type="button" data-cookie-accept>Accept all</button>
+      </div>
+    </div>
+  `;
+
+  document.body.appendChild(banner);
+  requestAnimationFrame(() => banner.classList.add("is-visible"));
+
+  const preferencesPanel = banner.querySelector(".cookie-preferences");
+  const preferencesButton = banner.querySelector("[data-cookie-preferences]");
+
+  function closeBanner(preferences) {
+    saveCookieConsent(preferences);
+    banner.classList.remove("is-visible");
+    banner.addEventListener("transitionend", () => banner.remove(), {
+      once: true,
+    });
+  }
+
+  banner.querySelector("[data-cookie-reject]")?.addEventListener("click", () => {
+    closeBanner({
+      necessary: true,
+      preferences: false,
+      analytics: false,
+    });
+  });
+
+  banner.querySelector("[data-cookie-accept]")?.addEventListener("click", () => {
+    closeBanner({
+      necessary: true,
+      preferences: true,
+      analytics: true,
+    });
+  });
+
+  preferencesButton?.addEventListener("click", () => {
+    if (preferencesPanel.hidden) {
+      preferencesPanel.hidden = false;
+      preferencesButton.textContent = "Save preferences";
+      return;
+    }
+
+    closeBanner({
+      necessary: true,
+      preferences: banner.querySelector("input[name='preferences']")?.checked || false,
+      analytics: banner.querySelector("input[name='analytics']")?.checked || false,
+    });
+  });
+}
+
+function registerServiceWorker() {
+  if (!("serviceWorker" in navigator)) return;
+
+  window.addEventListener("load", () => {
+    navigator.serviceWorker.register("/sw.js").catch(() => {
+      // The site still works without offline caching.
+    });
+  });
+}
+
 applyTheme(initialTheme);
 
 menuToggle?.addEventListener("click", () => {
@@ -96,4 +211,6 @@ themeToggle?.addEventListener("click", () => {
 
 guideToggle?.addEventListener("click", () => openGuide(true));
 
+registerServiceWorker();
+openCookieConsent();
 openGuide();

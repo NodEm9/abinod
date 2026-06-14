@@ -41,6 +41,7 @@ jobs:
           node --check server.js
           node --check assets/site.js
           node --check assets/contact-form.js
+          node --check sw.js
 
       - name: Start production server
         run: |
@@ -64,6 +65,7 @@ jobs:
             "/contact/" \
             "/docs/" \
             "/assets/site.js" \
+            "/sw.js" \
             "/assets/og-abinod.png"
           do
             curl --fail --silent --show-error --retry 10 --retry-delay 1 "http://localhost:${PORT}${route}" > /dev/null
