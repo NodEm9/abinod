@@ -2027,6 +2027,11 @@ body[data-theme="dark"] .form-row textarea {
   background: rgba(255, 255, 255, 0.06);
 }
 
+body[data-theme="dark"] .form-row select option {
+  color: #080f14;
+  background: #ffffff;
+}
+
 .site-guide {
   position: fixed;
   z-index: 40;
