@@ -27,6 +27,7 @@ body[data-theme="dark"] {
 }
 
 html {
+  scrollbar-gutter: stable;
   scroll-behavior: smooth;
 }
 
@@ -40,8 +41,7 @@ body {
   line-height: 1.6;
 }
 
-body.menu-open,
-body.guide-open {
+body.menu-open {
   overflow: hidden;
 }
 
