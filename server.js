@@ -1,7 +1,6 @@
 import "dotenv/config";
 
 import express from "express";
-import { MongoClient } from "mongodb";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -10,64 +9,6 @@ const __dirname = path.dirname(__filename);
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
-const mongoUri = process.env.MONGODB_URI;
-const mongoDbName = process.env.MONGODB_DB || "abinod";
-const contactCollectionName =
-  process.env.CONTACT_COLLECTION || "contact_submissions";
-
-let mongoClientPromise;
-
-function getMongoClient() {
-  if (!mongoUri) {
-    const error = new Error("MONGODB_URI is not configured.");
-    error.code = "CONTACT_STORAGE_NOT_CONFIGURED";
-    throw error;
-  }
-
-  mongoClientPromise ??= new MongoClient(mongoUri, {
-    serverSelectionTimeoutMS: 8000,
-  })
-    .connect()
-    .catch((error) => {
-      mongoClientPromise = undefined;
-      throw error;
-    });
-  return mongoClientPromise;
-}
-
-function cleanText(value, maxLength) {
-  return String(value || "")
-    .trim()
-    .replace(/\s+/g, " ")
-    .slice(0, maxLength);
-}
-
-function validateContactSubmission(body) {
-  const submission = {
-    name: cleanText(body.name, 120),
-    email: cleanText(body.email, 160).toLowerCase(),
-    topic: cleanText(body.topic, 80),
-    message: String(body.message || "").trim().slice(0, 4000),
-  };
-
-  const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-
-  if (!submission.name) return { error: "Please enter your name." };
-  if (!emailPattern.test(submission.email)) {
-    return { error: "Please enter a valid email address." };
-  }
-  if (!submission.topic) return { error: "Please select a topic." };
-  if (submission.message.length < 10) {
-    return { error: "Please include a short message." };
-  }
-
-  return { submission };
-}
-
-function isLocalRequest(request) {
-  const host = request.hostname;
-  return host === "localhost" || host === "127.0.0.1" || host === "::1";
-}
 
 app.use(express.json({ limit: "32kb" }));
 app.use(express.urlencoded({ extended: false, limit: "32kb" }));
@@ -75,52 +16,17 @@ app.use(express.urlencoded({ extended: false, limit: "32kb" }));
 app.get("/api/health", (request, response) => {
   response.json({
     ok: true,
-    contactStorage: Boolean(mongoUri),
+    runtime: "local-express",
+    contactStorage: false,
   });
 });
 
-app.post("/api/contact", async (request, response) => {
-  try {
-    if (request.body.website) {
-      return response.status(204).end();
-    }
-
-    const result = validateContactSubmission(request.body);
-    if (result.error) {
-      return response.status(400).json({ error: result.error });
-    }
-
-    const client = await getMongoClient();
-    const collection = client.db(mongoDbName).collection(contactCollectionName);
-
-    await collection.insertOne({
-      ...result.submission,
-      source: "abinod-website",
-      status: "new",
-      createdAt: new Date(),
-      userAgent: request.get("user-agent") || "",
-    });
-
-    response.status(201).json({
-      message: "Thanks. Your message has been received.",
-    });
-  } catch (error) {
-    console.error("Contact form submission failed:", error);
-
-    if (error.code === "CONTACT_STORAGE_NOT_CONFIGURED") {
-      return response.status(503).json({
-        error: isLocalRequest(request)
-          ? "MONGODB_URI is not configured. Add it to .env to enable contact submissions."
-          : "The contact service is not available yet. Please email hello@abinod.com.",
-        fallbackEmail: "hello@abinod.com",
-      });
-    }
-
-    response.status(500).json({
-      error: "The message could not be sent right now. Please email hello@abinod.com.",
-      fallbackEmail: "hello@abinod.com",
-    });
-  }
+app.post("/api/contact", (request, response) => {
+  response.status(501).json({
+    error:
+      "Contact submissions run through the Vercel API in production. Please email abinod@online.de.",
+    fallbackEmail: "abinod@online.de",
+  });
 });
 
 app.use((error, request, response, next) => {

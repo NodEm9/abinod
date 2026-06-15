@@ -96,7 +96,7 @@ jobs:
             curl --fail --silent --show-error "http://127.0.0.1:${PORT}${route}" > /dev/null
           done
 
-      - name: Smoke test contact validation
+      - name: Smoke test local contact fallback
         run: |
           status=$(curl --silent --output response.json --write-out "%{http_code}" \
             --request POST "http://127.0.0.1:${PORT}/api/contact" \
@@ -105,8 +105,8 @@ jobs:
 
           cat response.json
 
-          if [ "$status" != "400" ]; then
-            echo "Expected contact validation to return 400, got $status"
+          if [ "$status" != "501" ]; then
+            echo "Expected local contact fallback to return 501, got $status"
             exit 1
           fi
 

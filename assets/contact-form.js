@@ -1,6 +1,6 @@
 const form = document.querySelector("[data-contact-form]");
 const status = document.querySelector("[data-contact-status]");
-const fallbackEmail = "hello@abinod.com";
+const fallbackEmail = "abinod@online.de";
 
 function setStatus(message, state) {
   if (!status) return;

@@ -106,14 +106,14 @@ export default async function handler(request, response) {
 
     if (error.code === "CONTACT_STORAGE_NOT_CONFIGURED") {
       return response.status(503).json({
-        error: "The contact service is not available yet. Please email hello@abinod.com.",
-        fallbackEmail: "hello@abinod.com",
+        error: "The contact service is not available yet. Please email abinod@online.de.",
+        fallbackEmail: "abinod@online.de",
       });
     }
 
     return response.status(500).json({
-      error: "The message could not be sent right now. Please email hello@abinod.com.",
-      fallbackEmail: "hello@abinod.com",
+      error: "The message could not be sent right now. Please email abinod@online.de.",
+      fallbackEmail: "abinod@online.de",
     });
   }
 }

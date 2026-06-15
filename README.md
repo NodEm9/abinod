@@ -69,19 +69,8 @@ http://localhost:3000
 
 ## Environment Variables
 
-Create a local `.env` file from `.env.example`:
-
-```bash
-PORT=3000
-MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/?retryWrites=true&w=majority
-MONGODB_DB=abinod
-CONTACT_COLLECTION=contact_submissions
-```
-
-Do not commit `.env`.
-
-For production, configure the same variables in the hosting provider's
-environment settings:
+For production contact submissions, configure these values in the hosting
+provider's environment settings:
 
 ```text
 MONGODB_URI
@@ -90,8 +79,9 @@ CONTACT_COLLECTION
 NODE_ENV=production
 ```
 
-The contact form cannot store messages unless `MONGODB_URI` is available to the
-running server process.
+Do not commit `.env` files or secrets. The local Express server serves the
+static website; production contact storage runs through the Vercel Function in
+`api/contact.js`.
 
 ## Contact Form
 
@@ -101,11 +91,11 @@ The contact form posts to:
 POST /api/contact
 ```
 
-Valid submissions are stored in MongoDB using the configured `MONGODB_URI`, database name, and collection name.
+Valid production submissions are stored in MongoDB using the configured `MONGODB_URI`, database name, and collection name.
 
 The endpoint also validates required fields and includes a honeypot field for basic bot filtering.
 
-If submissions return a contact-service error, confirm that the production host has `MONGODB_URI` configured as an environment variable. Static-only hosting will serve the pages, but it will not run the Express `/api/contact` endpoint.
+If submissions return a contact-service error, confirm that Vercel has the MongoDB environment variables configured and that MongoDB Atlas allows connections from the deployment environment.
 
 ## Cookies And Consent
 
@@ -137,7 +127,7 @@ The workflow:
 - Checks JavaScript syntax
 - Starts the production server
 - Smoke-tests the main public routes
-- Smoke-tests contact form validation
+- Smoke-tests the local contact fallback
 - Prints server logs if something fails
 
 ## Deploying On Vercel
