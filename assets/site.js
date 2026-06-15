@@ -7,6 +7,7 @@ const storedTheme = localStorage.getItem("abinod-theme");
 const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
 const initialTheme = storedTheme || (prefersDark ? "dark" : "light");
 const consentCookieName = "abinod_cookie_consent";
+const guideSessionKey = "abinod_guide_shown";
 
 function applyTheme(theme) {
   document.body.dataset.theme = theme;
@@ -25,9 +26,21 @@ function closeMenu() {
   menuToggle?.setAttribute("aria-expanded", "false");
 }
 
+function isHomepage() {
+  return window.location.pathname === "/" || window.location.pathname === "/index.html";
+}
+
+function hasGuideBeenShown() {
+  return sessionStorage.getItem(guideSessionKey) === "true";
+}
+
+function markGuideShown() {
+  sessionStorage.setItem(guideSessionKey, "true");
+}
+
 function openGuide(force = false) {
-  if (!force && localStorage.getItem("abinod-guide-seen") === "true") return;
-  if (!force) localStorage.setItem("abinod-guide-seen", "true");
+  if (!force && (!isHomepage() || hasGuideBeenShown())) return;
+  if (!force) markGuideShown();
 
   const guide = document.createElement("div");
   guide.className = "site-guide";
@@ -51,7 +64,7 @@ function openGuide(force = false) {
       </div>
       <div class="site-guide-actions">
         <button class="button primary" type="button" data-guide-close>Start exploring</button>
-        <a class="button secondary" href="/products/">View products</a>
+        <a class="button secondary" href="/products/" data-guide-close>View products</a>
       </div>
     </div>
   `;
@@ -67,6 +80,7 @@ function openGuide(force = false) {
 
   guide.addEventListener("click", (event) => {
     if (event.target === guide || event.target.closest("[data-guide-close]")) {
+      markGuideShown();
       closeGuide();
     }
   });
@@ -74,7 +88,10 @@ function openGuide(force = false) {
   document.addEventListener(
     "keydown",
     (event) => {
-      if (event.key === "Escape" && document.body.contains(guide)) closeGuide();
+      if (event.key === "Escape" && document.body.contains(guide)) {
+        markGuideShown();
+        closeGuide();
+      }
     },
     { once: true },
   );

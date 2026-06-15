@@ -2095,6 +2095,16 @@ body[data-theme="dark"] .form-row select option {
   gap: 12px;
 }
 
+.site-guide-actions .button.secondary {
+  color: var(--ink);
+  background: rgba(8, 15, 20, 0.04);
+}
+
+body[data-theme="dark"] .site-guide-actions .button.secondary {
+  color: var(--ink);
+  background: rgba(255, 255, 255, 0.06);
+}
+
 .cookie-consent {
   position: fixed;
   z-index: 36;
