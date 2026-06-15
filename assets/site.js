@@ -31,17 +31,18 @@ function isHomepage() {
 }
 
 function hasGuideBeenShown() {
-  return sessionStorage.getItem(guideSessionKey) === "true";
+  return (
+    sessionStorage.getItem(guideSessionKey) === "true" ||
+    getCookie(guideSessionKey) === "true"
+  );
 }
 
 function markGuideShown() {
   sessionStorage.setItem(guideSessionKey, "true");
+  document.cookie = `${guideSessionKey}=true; path=/; SameSite=Lax`;
 }
 
 function openGuide(force = false) {
-  if (!force && (!isHomepage() || hasGuideBeenShown())) return;
-  if (!force) markGuideShown();
-
   const guide = document.createElement("div");
   guide.className = "site-guide";
   guide.innerHTML = `
@@ -95,6 +96,12 @@ function openGuide(force = false) {
     },
     { once: true },
   );
+}
+
+function openGuideOnceOnHomepage() {
+  if (!isHomepage() || hasGuideBeenShown()) return;
+  markGuideShown();
+  openGuide();
 }
 
 function setCookie(name, value, days) {
@@ -239,4 +246,6 @@ guideToggle?.addEventListener("click", () => openGuide(true));
 
 registerServiceWorker();
 runWhenIdle(openCookieConsent, 900);
-runWhenIdle(openGuide, 1800);
+if (isHomepage() && !hasGuideBeenShown()) {
+  runWhenIdle(openGuideOnceOnHomepage, 1800);
+}

@@ -1,4 +1,4 @@
-const CACHE_NAME = "abinod-static-v4";
+const CACHE_NAME = "abinod-static-v5";
 const STATIC_ASSETS = [
   "/styles.css",
   "/assets/site.js",
