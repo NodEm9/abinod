@@ -22,7 +22,7 @@ Abinod exists to create products that help software remain understandable as it 
 - Mission page
 - Brand Essence page
 - Blog and first essay
-- Contact page with MongoDB-backed form submission
+- Contact page with email-based form submission
 - Ambiten documentation entry point
 - Shared Open Graph image
 - Mobile navigation
@@ -35,7 +35,6 @@ Abinod exists to create products that help software remain understandable as it 
 
 - Node.js
 - Express
-- MongoDB Node.js driver
 - Static HTML, CSS, and JavaScript
 - Service worker
 - GitHub Actions for production readiness checks
@@ -67,35 +66,16 @@ By default, the site runs at:
 http://localhost:3000
 ```
 
-## Environment Variables
-
-For production contact submissions, configure these values in the hosting
-provider's environment settings:
-
-```text
-MONGODB_URI
-MONGODB_DB
-CONTACT_COLLECTION
-NODE_ENV=production
-```
-
-Do not commit `.env` files or secrets. The local Express server serves the
-static website; production contact storage runs through the Vercel Function in
-`api/contact.js`.
-
 ## Contact Form
 
-The contact form posts to:
+The contact form opens the visitor's email app with a prefilled message to:
 
 ```text
-POST /api/contact
+abinod@online.de
 ```
 
-Valid production submissions are stored in MongoDB using the configured `MONGODB_URI`, database name, and collection name.
-
-The endpoint also validates required fields and includes a honeypot field for basic bot filtering.
-
-If submissions return a contact-service error, confirm that Vercel has the MongoDB environment variables configured and that MongoDB Atlas allows connections from the deployment environment.
+Messages are not stored in a database. The fallback `/api/contact` route returns
+an email-only response for older cached clients or direct API requests.
 
 ## Cookies And Consent
 
@@ -132,28 +112,16 @@ The workflow:
 
 ## Deploying On Vercel
 
-The static website can be deployed on Vercel, and the contact API is implemented
-as Vercel Functions in the `api/` directory:
+The static website can be deployed on Vercel. Small API fallbacks live in the
+`api/` directory:
 
 ```text
 api/contact.js
 api/health.js
 ```
 
-The frontend posts to `/api/contact`, so no client-side URL change is needed
-when the site is served from Vercel.
-
-In the Vercel dashboard, add these Environment Variables for Production:
-
-```text
-MONGODB_URI
-MONGODB_DB
-CONTACT_COLLECTION
-NODE_ENV=production
-```
-
-After adding environment variables, redeploy the project. You can verify the API
-configuration at:
+No database environment variables are required. You can verify the deployed API
+fallback at:
 
 ```text
 https://www.abinod.com/api/health

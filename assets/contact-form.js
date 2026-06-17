@@ -1,6 +1,6 @@
 const form = document.querySelector("[data-contact-form]");
 const status = document.querySelector("[data-contact-status]");
-const fallbackEmail = "abinod@online.de";
+const contactEmail = "abinod@online.de";
 
 function setStatus(message, state) {
   if (!status) return;
@@ -8,55 +8,52 @@ function setStatus(message, state) {
   status.dataset.state = state;
 }
 
-function setFallbackStatus(message, mailto) {
-  if (!status) return;
-  status.textContent = "";
-  status.dataset.state = "error";
-  status.append(document.createTextNode(`${message} `));
-
-  const link = document.createElement("a");
-  link.href = mailto;
-  link.textContent = "Send by email";
-  status.append(link);
+function cleanValue(value) {
+  return String(value || "").trim();
 }
 
-form?.addEventListener("submit", async (event) => {
+function buildMailtoUrl(payload) {
+  const mailto = new URL(`mailto:${contactEmail}`);
+  mailto.searchParams.set(
+    "subject",
+    `Abinod contact: ${payload.topic || "General"}`,
+  );
+  mailto.searchParams.set(
+    "body",
+    [
+      `Name: ${payload.name}`,
+      `Email: ${payload.email}`,
+      `Topic: ${payload.topic}`,
+      "",
+      payload.message,
+    ].join("\n"),
+  );
+
+  return mailto.toString();
+}
+
+form?.addEventListener("submit", (event) => {
   event.preventDefault();
-  setStatus("Sending message...", "loading");
 
-  const submitButton = form.querySelector("button[type='submit']");
-  submitButton?.setAttribute("disabled", "true");
   const formData = new FormData(form);
-  const payload = Object.fromEntries(formData);
+  const payload = {
+    name: cleanValue(formData.get("name")),
+    email: cleanValue(formData.get("email")),
+    topic: cleanValue(formData.get("topic")),
+    message: cleanValue(formData.get("message")),
+    website: cleanValue(formData.get("website")),
+  };
 
-  try {
-    const response = await fetch("/api/contact", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(payload),
-    });
-
-    const data = await response.json().catch(() => ({}));
-
-    if (!response.ok) {
-      const error = new Error(data.error || "The contact service is unavailable.");
-      error.fallbackEmail = data.fallbackEmail || fallbackEmail;
-      throw error;
-    }
-
+  if (payload.website) {
     form.reset();
-    setStatus(data.message || "Thanks. Your message has been received.", "success");
-  } catch (error) {
-    const mailto = new URL(`mailto:${error.fallbackEmail || fallbackEmail}`);
-    mailto.searchParams.set("subject", `Abinod contact: ${payload.topic || "General"}`);
-    mailto.searchParams.set(
-      "body",
-      `Name: ${payload.name || ""}\nEmail: ${payload.email || ""}\nTopic: ${payload.topic || ""}\n\n${payload.message || ""}`,
-    );
-    setFallbackStatus(error.message, mailto.toString());
-  } finally {
-    submitButton?.removeAttribute("disabled");
+    return;
   }
+
+  if (!payload.name || !payload.email || !payload.topic || !payload.message) {
+    setStatus("Please complete every required field before sending.", "error");
+    return;
+  }
+
+  window.location.href = buildMailtoUrl(payload);
+  setStatus("Your email app should open with the message ready to send.", "success");
 });

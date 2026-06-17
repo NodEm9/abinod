@@ -105,8 +105,8 @@ jobs:
 
           cat response.json
 
-          if [ "$status" != "501" ]; then
-            echo "Expected local contact fallback to return 501, got $status"
+          if [ "$status" != "410" ]; then
+            echo "Expected email-only contact fallback to return 410, got $status"
             exit 1
           fi
 
