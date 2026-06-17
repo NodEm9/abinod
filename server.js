@@ -17,14 +17,15 @@ app.get("/api/health", (request, response) => {
   response.json({
     ok: true,
     runtime: "local-express",
-    contactMode: "email",
+    contactMode: "smtp",
+    emailConfigured: false,
   });
 });
 
 app.post("/api/contact", (request, response) => {
-  response.status(410).json({
+  response.status(503).json({
     error:
-      "Contact submissions are handled by email. Please send your message to abinod@online.de.",
+      "Email delivery runs through the Vercel API in production. Please email abinod@online.de.",
     fallbackEmail: "abinod@online.de",
   });
 });

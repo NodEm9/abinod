@@ -68,14 +68,15 @@ http://localhost:3000
 
 ## Contact Form
 
-The contact form opens the visitor's email app with a prefilled message to:
+The contact form posts to `/api/contact`. In production, the Vercel Function
+sends the message to:
 
 ```text
 abinod@online.de
 ```
 
-Messages are not stored in a database. The fallback `/api/contact` route returns
-an email-only response for older cached clients or direct API requests.
+Messages are sent by email and are not stored in a database. If email delivery
+is unavailable, the frontend shows a mailto fallback.
 
 ## Cookies And Consent
 
@@ -112,16 +113,29 @@ The workflow:
 
 ## Deploying On Vercel
 
-The static website can be deployed on Vercel. Small API fallbacks live in the
-`api/` directory:
+The static website can be deployed on Vercel. The contact API and health check
+live in the `api/` directory:
 
 ```text
 api/contact.js
 api/health.js
 ```
 
-No database environment variables are required. You can verify the deployed API
-fallback at:
+No database environment variables are required. Add these SMTP variables in the
+Vercel dashboard:
+
+```text
+SMTP_HOST
+SMTP_PORT
+SMTP_USER
+SMTP_PASS
+SMTP_FROM
+CONTACT_TO=abinod@online.de
+```
+
+`SMTP_FROM` should usually be the same mailbox as `SMTP_USER`, or another
+verified sender allowed by the SMTP provider. You can verify the deployed API
+configuration at:
 
 ```text
 https://www.abinod.com/api/health
